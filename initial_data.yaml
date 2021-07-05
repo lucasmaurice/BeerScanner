@@ -13,7 +13,7 @@
   fields:
     name: Original Blonde
     style: Blonde
-    producer: Looks
+    producer: Louks
     abv: 5.0
 - model: DrinkConsumption.product
   pk: 2
