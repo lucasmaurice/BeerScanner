@@ -22,7 +22,11 @@ class ProductContainer(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
     def __str__(self):
-        return self.product.name + " - " + self.container.__str__()
+        refills = Refill.objects.all().filter(product=self)
+        consumed = 0 
+        for r in refills:
+            consumed += r.container.capacity
+        return self.product.name + " (" + str(self.container.capacity - consumed) + " L)"
 
 
 class PersonnalContainer(models.Model):
@@ -34,7 +38,7 @@ class PersonnalContainer(models.Model):
 
 
 class PersonnalTag(models.Model):
-    uid = models.CharField(max_length=200)
+    uid = models.CharField(max_length=200, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     linked_container = models.ForeignKey(PersonnalContainer, on_delete=models.CASCADE)
     def __str__(self):
@@ -48,3 +52,8 @@ class Refill(models.Model):
     container = models.ForeignKey(PersonnalContainer, on_delete=models.CASCADE, default=1)
     def __str__(self):
         return self.user.username + " - " + self.product.product.name
+
+
+class Tap(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    onTap = models.OneToOneField(ProductContainer, on_delete=models.CASCADE, blank=True, null=True, unique=True)
