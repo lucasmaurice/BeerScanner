@@ -29,7 +29,7 @@ class ProductContainer(models.Model):
         return self.product.name + " (" + str(self.container.capacity - consumed) + " L)"
 
 
-class PersonnalContainer(models.Model):
+class PersonalContainer(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     capacity = models.FloatField(help_text="Capacity of the container in Liters.")
     cost = models.FloatField(default=0, help_text="Cost of a filling in CAD$")
@@ -37,19 +37,19 @@ class PersonnalContainer(models.Model):
         return self.name + " (" + str(self.capacity) + " L)"
 
 
-class PersonnalTag(models.Model):
+class PersonalTag(models.Model):
     uid = models.CharField(max_length=200, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    linked_container = models.ForeignKey(PersonnalContainer, on_delete=models.CASCADE)
+    linked_container = models.ForeignKey(PersonalContainer, on_delete=models.CASCADE)
     def __str__(self):
         return self.uid
 
 
 class Refill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tag = models.ForeignKey(PersonnalTag, on_delete=models.CASCADE, blank=True, null=True)
+    tag = models.ForeignKey(PersonalTag, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(ProductContainer, on_delete=models.CASCADE)
-    container = models.ForeignKey(PersonnalContainer, on_delete=models.CASCADE, default=1)
+    container = models.ForeignKey(PersonalContainer, on_delete=models.CASCADE, default=1)
     def __str__(self):
         return self.user.username + " - " + self.product.product.name
 

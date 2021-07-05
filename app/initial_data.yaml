@@ -61,15 +61,36 @@
   fields:
     product: 4
     container: 2
-- model: DrinkConsumption.personnalcontainer
+
+# Personal 
+- model: DrinkConsumption.personalcontainer
   pk: 1
   fields:
     name: Party Cup
     capacity: 0.355
     cost: 1.85
-- model: DrinkConsumption.personnalcontainer
+- model: DrinkConsumption.personalcontainer
   pk: 2
   fields:
     name: Buck Okto
     capacity: 1.065
     cost: 6.0
+
+# USERS
+- model: auth.user
+  pk: 1
+  fields:
+    password: pbkdf2_sha256$260000$sDPOnKN6HC3aJ38l4pVTiZ$ui6SjvwrtWzLIS1nEqLMpLn8hGTM5oi8z6mvWZ1wBsU=
+    username: lmaurice
+    first_name: Sonic
+    is_active: true
+    is_superuser: true
+    is_staff: true
+- model: auth.user
+  pk: 2
+  fields:
+    username: arousseau
+    first_name: Rousseau
+    is_active: true
+    is_superuser: true
+    is_staff: true
