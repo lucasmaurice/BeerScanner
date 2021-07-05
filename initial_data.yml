@@ -1,0 +1,75 @@
+- model: DrinkConsumption.container
+  pk: 1
+  fields:
+    name: Corny Keg
+    capacity: 20.0
+- model: DrinkConsumption.container
+  pk: 2
+  fields:
+    name: Keg
+    capacity: 30.0
+- model: DrinkConsumption.product
+  pk: 1
+  fields:
+    name: Original Blonde
+    style: Blonde
+    producer: Looks
+    abv: 5.0
+- model: DrinkConsumption.product
+  pk: 2
+  fields:
+    name: Citra de Table
+    style: Bière de table
+    producer: Dunham
+    abv: 4.3
+- model: DrinkConsumption.product
+  pk: 3
+  fields:
+    name: Nice n'Hazy
+    style: Pale Ale Hazy Américaine
+    producer: Lagabière
+    abv: 5.5
+- model: DrinkConsumption.product
+  pk: 4
+  fields:
+    name: Ta Meilleure
+    style: Northeast IPA
+    producer: Lagabière
+    abv: 7.0
+- model: DrinkConsumption.productcontainer
+  pk: 1
+  fields:
+    product: 1
+    container: 1
+- model: DrinkConsumption.productcontainer
+  pk: 2
+  fields:
+    product: 1
+    container: 1
+- model: DrinkConsumption.productcontainer
+  pk: 3
+  fields:
+    product: 2
+    container: 2
+- model: DrinkConsumption.productcontainer
+  pk: 4
+  fields:
+    product: 3
+    container: 2
+- model: DrinkConsumption.productcontainer
+  pk: 5
+  fields:
+    product: 4
+    container: 2
+- model: DrinkConsumption.personnalcontainer
+  pk: 1
+  fields:
+    name: Party Cup
+    capacity: 0.355
+    cost: 1.85
+- model: DrinkConsumption.personnalcontainer
+  pk: 2
+  fields:
+    name: Buck Okto
+    capacity: 1.065
+    cost: 6.0
