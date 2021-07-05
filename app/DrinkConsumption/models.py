@@ -11,6 +11,9 @@ class Container(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
+    style = models.CharField(max_length=200, blank=True, default="")
+    producer = models.CharField(max_length=200, blank=True, default="")
+    abv = models.FloatField(help_text="Alcohol By Volume.", default=0)
     def __str__(self):
         return self.name
 
@@ -38,9 +41,10 @@ class PersonnalTag(models.Model):
         return self.uid
 
 
-class PersonnalConsumption(models.Model):
+class Refill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tag = models.ForeignKey(PersonnalTag, on_delete=models.CASCADE)
+    tag = models.ForeignKey(PersonnalTag, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(ProductContainer, on_delete=models.CASCADE)
+    container = models.ForeignKey(PersonnalContainer, on_delete=models.CASCADE, default=1)
     def __str__(self):
         return self.user.username + " - " + self.product.product.name
