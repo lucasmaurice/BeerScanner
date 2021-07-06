@@ -7,8 +7,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 class RefillAdmin(admin.ModelAdmin):
     model=Refill
-    list_display = ['pk', 'get_client', 'product', 'container']
-    list_filter = ['user', 'product', 'container']
+    list_display = ['pk', 'get_client', 'product', 'container', 'tag']
+    list_filter = ['user', 'product', 'container', 'tag']
 
     def get_client(self, obj):
         if obj.user.first_name != '':
@@ -39,6 +39,15 @@ class TapAdmin(admin.ModelAdmin):
     def get_ontap(self, obj):
         return obj.onTap
 
+class ReaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'physical_id', 'get_tap', 'get_ontap']
+    def get_tap(self, obj):
+        return obj.forTap
+
+    def get_ontap(self, obj):
+        if obj.forTap != None:
+            return obj.forTap.onTap
+        return None
 
 admin.site.register(Container)
 admin.site.register(Product, ProductAdmin)
@@ -47,4 +56,4 @@ admin.site.register(PersonalContainer)
 admin.site.register(Tag)
 admin.site.register(Refill, RefillAdmin)
 admin.site.register(Tap, TapAdmin)
-admin.site.register(Reader)
+admin.site.register(Reader, ReaderAdmin)

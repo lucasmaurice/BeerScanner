@@ -59,9 +59,13 @@ class Refill(models.Model):
 class Tap(models.Model):
     name = models.CharField(max_length=200, unique=True)
     onTap = models.OneToOneField(ProductContainer, on_delete=models.CASCADE, blank=True, null=True, unique=True)
+    def __str__(self):
+        return self.name
 
 
 class Reader(models.Model):
     name = models.CharField(max_length=200)
     physical_id = models.CharField(max_length=200, unique=True)
     forTap = models.ForeignKey(Tap, on_delete=models.CASCADE, blank=True, null=True)
+    def __str__(self):
+        return self.name
