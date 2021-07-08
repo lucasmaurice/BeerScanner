@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 class ContainerViewSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
@@ -31,13 +31,12 @@ def tag_scan(request):
     user = tag.owner
     container = tag.linked_container
 
-    refill = Refill.objects.create(user=user, tag=tag, product=product, container=container).save()
+    Refill.objects.create(user=user, tag=tag, product=product, container=container).save()
 
     result = {}
     result['result'] = 'success'
     result['container'] = container.name
     result['user'] = UserSerializer(user).data
     result['product'] = ProductSerializer(product.product).data
-
 
     return Response(result)

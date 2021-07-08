@@ -15,17 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers
-from DrinkConsumption import views
 
-router = routers.DefaultRouter()
-router.register(r'containers', views.ContainerViewSet)
-router.register(r'products', views.ProductViewSet)
-router.register(r'products-container', views.ProductContainerViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/scan/', views.tag_scan),
-    path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('', include('DrinkConsumption.urls'))
 ]
