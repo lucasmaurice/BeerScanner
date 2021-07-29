@@ -1,3 +1,4 @@
+import threading
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
@@ -6,7 +7,7 @@ from .models import *
 class ContainerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Container
-        fields = ['name', 'capacity']
+        fields = ['product', 'capacity']
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,13 +16,19 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['name', 'style', 'producer', 'abv']
 
 
-class ProductContainerSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ProductContainer
-        fields = ['product', 'container']
-
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name']
+
+
+class TagSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['uid', 'description']
+
+
+class ReaderSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Reader
+        fields = ['physical_id', 'name', 'forTap']

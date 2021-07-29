@@ -18,12 +18,12 @@ class RefillAdmin(admin.ModelAdmin):
     get_client.short_description = "Client"
 
 
-class ProductContainerAdmin(admin.ModelAdmin):
-    model = ProductContainer
+class ContainerAdmin(admin.ModelAdmin):
+    model = Container
     list_display = ['get_title', 'get_remaining']
 
     def get_title(self, obj):
-        return obj.product.name + " - " + obj.container.__str__()
+        return obj.product.name + " - " + str(obj.capacity) + " L"
     get_title.short_description = 'Name'
 
     def get_remaining(self, obj):
@@ -31,7 +31,7 @@ class ProductContainerAdmin(admin.ModelAdmin):
         consumed = 0
         for refill in refills:
             consumed += refill.container.capacity
-        return str(obj.container.capacity - consumed) + " L"
+        return str(obj.capacity - consumed) + " L"
     get_remaining.short_description = 'Remaining'
 
 class TapAdmin(admin.ModelAdmin):
@@ -49,9 +49,8 @@ class ReaderAdmin(admin.ModelAdmin):
             return obj.forTap.onTap
         return None
 
-admin.site.register(Container)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductContainer, ProductContainerAdmin)
+admin.site.register(Container, ContainerAdmin)
 admin.site.register(PersonalContainer)
 admin.site.register(Tag)
 admin.site.register(Refill, RefillAdmin)
