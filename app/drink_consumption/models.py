@@ -23,9 +23,9 @@ class ProductContainer(models.Model):
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
     def __str__(self):
         refills = Refill.objects.all().filter(product=self)
-        consumed = 0 
-        for r in refills:
-            consumed += r.container.capacity
+        consumed = 0
+        for refill in refills:
+            consumed += refill.container.capacity
         return self.product.name + " (" + str(self.container.capacity - consumed) + " L)"
 
 
@@ -43,7 +43,7 @@ class Tag(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)
     uid = models.CharField(max_length=200, unique=True)
     def __str__(self):
-        if self.description != None and self.description != "":
+        if self.description is not None and self.description != "":
             return self.uid + " (" + self.description + ")"
         return self.uid + " (" + self.owner.username + ")"
 

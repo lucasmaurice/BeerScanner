@@ -28,9 +28,9 @@ class ProductContainerAdmin(admin.ModelAdmin):
 
     def get_remaining(self, obj):
         refills = Refill.objects.all().filter(product=obj)
-        consumed = 0 
-        for r in refills:
-            consumed += r.container.capacity
+        consumed = 0
+        for refill in refills:
+            consumed += refill.container.capacity
         return str(obj.container.capacity - consumed) + " L"
     get_remaining.short_description = 'Remaining'
 
@@ -45,7 +45,7 @@ class ReaderAdmin(admin.ModelAdmin):
         return obj.forTap
 
     def get_ontap(self, obj):
-        if obj.forTap != None:
+        if obj.forTap is not None:
             return obj.forTap.onTap
         return None
 

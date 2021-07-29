@@ -1,11 +1,12 @@
-from .models import *
-from .serializers import *
-from rest_framework import status
+# from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
-from django.shortcuts import get_object_or_404, render
+from .models import *
+from .serializers import *
+
 
 class ContainerViewSet(viewsets.ModelViewSet):
     queryset = Container.objects.all()
