@@ -3,5 +3,3 @@ PyYAML>=5.4.1
 djangorestframework>=3.12.4
 django-filter>=2.4.0
 markdown>=3.3.4
-mysqlclient~=1.4.6
-django-mysql~=3.5.0
