@@ -1,20 +1,26 @@
 version: "3.9"
-   
+
 services:
-  # db:
-  #   image: postgres
-  #   volumes:
-  #     - ./data/db:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_DB=postgres
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+  db:
+    image: mariadb
+    restart: always
     volumes:
-      - ./app:/app
+      - ./dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: django-db
+      MYSQL_ROOT_PASSWORD: django-root
+      MYSQL_PASSWORD: django-pass
+      MYSQL_USER: django
+  web:
+    image: justereseau/beer-scanner:latest
+    restart: always
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: django-db
+      MYSQL_PASSWORD: django-pass
+      MYSQL_USER: django
+      DJANGO_SECRET_KEY: ChangeThisWhenInProd
     ports:
       - "8000:8000"
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
