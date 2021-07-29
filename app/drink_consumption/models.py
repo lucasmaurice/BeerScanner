@@ -14,6 +14,7 @@ class Product(models.Model):
 class Container(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     capacity = models.FloatField(help_text="Capacity of the container in Liters.")
+    cost = models.FloatField(help_text="Cost of the keg, in your desired unit.")
     def __str__(self):
         refills = Refill.objects.all().filter(product=self)
         consumed = 0
@@ -25,7 +26,6 @@ class Container(models.Model):
 class PersonalContainer(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     capacity = models.FloatField(help_text="Capacity of the container in Liters.")
-    cost = models.FloatField(default=0, help_text="Cost of a filling in CAD$")
     def __str__(self):
         return self.name + " (" + str(self.capacity) + " L)"
 
@@ -49,7 +49,8 @@ class Refill(models.Model):
     product = models.ForeignKey(Container, on_delete=models.CASCADE)
     container = models.ForeignKey(PersonalContainer, on_delete=models.CASCADE, default=1)
     def __str__(self):
-        return self.user.username + " - " + self.product.product.name
+        cost = round(self.product.cost/self.product.capacity*self.container.capacity, 2)
+        return self.user.username + " - " + self.product.product.name + " - " + str(cost) + "$"
 
 
 class Tap(models.Model):

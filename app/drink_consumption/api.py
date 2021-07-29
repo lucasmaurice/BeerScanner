@@ -62,5 +62,6 @@ def tag_scan(request):
     result['container'] = container.name
     result['user'] = UserSerializer(user).data
     result['product'] = ProductSerializer(product.product).data
+    result['cost'] = round(product.cost/product.capacity*container.capacity, 2)
 
     return Response(result)

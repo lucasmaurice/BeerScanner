@@ -7,7 +7,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class RefillAdmin(admin.ModelAdmin):
     model=Refill
-    list_display = ['pk', 'get_client', 'product', 'container', 'tag']
+    list_display = ['pk', 'get_client', 'product', 'container', 'get_cost', 'tag']
     list_filter = ['user', 'product', 'container', 'tag']
 
     def get_client(self, obj):
@@ -16,6 +16,10 @@ class RefillAdmin(admin.ModelAdmin):
         else:
             return obj.user
     get_client.short_description = "Client"
+
+    def get_cost(self, obj):
+        return str(round(obj.product.cost/obj.product.capacity*obj.container.capacity, 2)) + " $"
+    get_cost.short_description = "Cost"
 
 
 class ContainerAdmin(admin.ModelAdmin):
