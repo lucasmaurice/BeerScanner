@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
 
 from . import forms
 from .models import Refill, Tag
@@ -52,7 +53,6 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
-
 def dashboard(request):
     taps = Tap.objects.all()
     taps_d = []
@@ -87,3 +87,32 @@ def dashboard(request):
     players_d.sort(key=lambda x: x.get('volume'), reverse=True)
 
     return render(request, 'dashboard.html', {'taps': taps_d, 'players': players_d})
+
+@login_required
+def personnal_dashboard(request):    
+    refills = Refill.objects.filter(user=request.user).order_by('-created_at')
+    volume = 0
+    drinks = 0
+    cost = 0
+    refills_d = []
+    for refill in refills:
+        drinks += 1
+        volume += refill.container.capacity
+        cost += refill.cost()
+        if refill.container.capacity < 1:
+            capacity = str(refill.container.capacity * 1000) + "mL"
+        else:
+            capacity = str(refill.container.capacity) + "L"
+        refills_d.append({'product': refill.product.product, 'container': refill.container.name, 'capacity': capacity, 'cost': refill.cost(), 'created_at': refill.created_at})
+
+    if request.user.first_name == "":
+        name = request.user.username
+    else:
+        name = request.user.first_name
+
+    if volume < 1:
+        volume = str(volume * 1000) + "mL"
+    else:
+        volume = str(volume) + "L"
+
+    return render(request, 'dashboard_p.html', {'refills': refills_d, 'name': name, 'volume': volume, 'drinks': drinks, 'cost': cost})

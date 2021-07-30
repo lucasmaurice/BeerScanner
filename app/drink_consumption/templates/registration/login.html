@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+<section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <h2>Login</h2>
+          Default password is username.
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-borderless table-dark">
+
+            {% if form.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+          {% endif %}
+        
+          {% if next %}
+            {% if user.is_authenticated %}
+              <p>Your account doesn't have access to this page. To proceed,
+              please login with an account that has access.</p>
+            {% else %}
+              <p>Please login to see this page.</p>
+            {% endif %}
+          {% endif %}
+        
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <table>
+              <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>{{ form.password }}</td>
+              </tr>
+            </table>
+            <input type="submit" value="login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+          </form>
+        
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

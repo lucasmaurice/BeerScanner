@@ -1,0 +1,56 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="ftco-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mb-5">
+        <h2 class="heading-section">My Dashboard</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-borderless table-dark">
+          <tbody>
+            <tr>
+              <td scope="row">
+                <span class="h5">Refills: </span><span class="h4">{{ drinks }}</span><hr/>
+                <span class="h5">Volume: </span><span class="h4">{{ volume }}</span><hr/>
+                <span class="h5">Balance: </span><span class="h4">{{ cost }}$</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <h2 class="heading-section">History</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-borderless table-dark">
+            <tbody>
+              {% for refill in refills %}
+              <tr>
+                <td scope="row">
+                  <div><h4>{{ refill.container }} of {{ refill.product.name }}</h4>{{ refill.created_at }}<hr/>  
+                  {{ refill.capacity }}, {{ refill.product.abv }} ABV, {{ refill.cost }}$</div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

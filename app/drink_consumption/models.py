@@ -57,9 +57,13 @@ class Refill(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.SET_NULL, blank=True, null=True)
     product = models.ForeignKey(Container, on_delete=models.RESTRICT )
     container = models.ForeignKey(PersonalContainer, on_delete=models.RESTRICT, default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        cost = round(self.product.cost/self.product.capacity*self.container.capacity, 2)
-        return self.user.username + " - " + self.product.product.name + " - " + str(cost) + "$"
+        return self.user.username + " - " + self.product.product.name + " - " + str(self.cost()) + "$"
+
+    def cost(self):
+        return round(self.product.cost/self.product.capacity*self.container.capacity, 2)
 
 
 class Tap(models.Model):

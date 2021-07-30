@@ -7,8 +7,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 class RefillAdmin(admin.ModelAdmin):
     model=Refill
-    list_display = ['pk', 'get_client', 'product', 'container', 'get_cost', 'tag']
-    list_filter = ['user', 'product', 'container', 'tag']
+    list_display = ['pk', 'get_client', 'product', 'container', 'get_cost', 'tag', 'created_at']
+    list_filter = ['user', 'product', 'container', 'tag', 'created_at']
 
     def get_client(self, obj):
         if obj.user.first_name != '':
@@ -24,7 +24,7 @@ class RefillAdmin(admin.ModelAdmin):
 
 class ContainerAdmin(admin.ModelAdmin):
     model = Container
-    list_display = ['get_title', 'get_remaining']
+    list_display = ['get_title', 'cost', 'get_remaining']
 
     def get_title(self, obj):
         return obj.product.name + " - " + str(obj.capacity) + " L"

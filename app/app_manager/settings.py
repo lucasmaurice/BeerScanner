@@ -101,6 +101,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = '/u/dashboard'
+LOGIN_URL = '/u/login'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -109,7 +112,7 @@ LANGUAGE_CODE = 'fr-ca'
 
 TIME_ZONE = 'America/Toronto'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_L10N = False
 
