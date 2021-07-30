@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 
-# Requirements:
-# apt-get install linux-headers-$(uname -r)
-# sudo pip3 install evdev
-# sudo pip3 install requests
-# sudo apt-get install python-gobject
-# sudo apt-get install libnotify-bin
-# sudo apt-get install libnotify-dev
+# Requirements: linux-headers-$(uname -r) 
+# apt-get install python-gobject libnotify-bin libnotify-dev
+# sudo pip3 install requests evdev
 
 import os
 import sys
@@ -16,9 +12,8 @@ import json
 from time import sleep
 from threading import Thread
 
-
-from gi.repository import Notify
-Notify.init("App Name")
+# from gi.repository import Notify
+# Notify.init("App Name")
 
 class DeviceManager:
     def __init__(self, device_name):
@@ -60,7 +55,7 @@ class DeviceListener:
     def __init__(self, device):
         self.device = device
         self.device.grab()
-        self.thread = Thread(target=self.listening_loop)
+        self.thread = Thread(target=self.listening_loop, daemon=True)
         self.thread.start()
     
     def listening_loop(self):
@@ -94,9 +89,9 @@ def on_read(reader, uid):
         "reader_id": reader,
         "tag_id": uid
     }
-    response = requests.post("http://10.250.10.167:8000/api/scan/", data=parameters)
-    Notify.Notification.new("Hi").show()
-    if response.status_code == 200:
+    response = requests.post("http://raspberrypi/api/scan/", data=parameters, timeout=3)
+    # Notify.Notification.new("Hi").show()
+    if response.status_code == 200 or response.status_code == 201:
         jprint(response.json())
     elif response.status_code == 404:
         print("Unknown tag or reader.")
