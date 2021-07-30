@@ -12,7 +12,7 @@ class Product(models.Model):
 
 
 class Container(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.RESTRICT)
     capacity = models.FloatField(help_text="Capacity of the container in Liters.")
     cost = models.FloatField(help_text="Cost of the keg, in your desired unit.")
     def __str__(self):
@@ -44,10 +44,10 @@ class Tag(models.Model):
 
 
 class Refill(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, blank=True, null=True)
-    product = models.ForeignKey(Container, on_delete=models.CASCADE)
-    container = models.ForeignKey(PersonalContainer, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT )
+    tag = models.ForeignKey(Tag, on_delete=models.SET_NULL, blank=True, null=True)
+    product = models.ForeignKey(Container, on_delete=models.RESTRICT )
+    container = models.ForeignKey(PersonalContainer, on_delete=models.RESTRICT, default=1)
     def __str__(self):
         cost = round(self.product.cost/self.product.capacity*self.container.capacity, 2)
         return self.user.username + " - " + self.product.product.name + " - " + str(cost) + "$"
@@ -55,7 +55,7 @@ class Refill(models.Model):
 
 class Tap(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    onTap = models.OneToOneField(Container, on_delete=models.CASCADE, blank=True, null=True, unique=True)
+    onTap = models.OneToOneField(Container, on_delete=models.SET_NULL, blank=True, null=True, unique=True)
     def __str__(self):
         return self.name
 
@@ -63,6 +63,6 @@ class Tap(models.Model):
 class Reader(models.Model):
     name = models.CharField(max_length=200, default="**Auto-created Reader**")
     physical_id = models.CharField(max_length=200, unique=True)
-    forTap = models.ForeignKey(Tap, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    forTap = models.ForeignKey(Tap, on_delete=models.SET_NULL, blank=True, null=True, default=None)
     def __str__(self):
         return self.name
