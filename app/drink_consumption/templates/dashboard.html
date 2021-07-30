@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="/static/dashboard/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="/static/dashboard/css/style.css">
+
+</head>
+
+<body>
+  <section class="ftco-top">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <h2 class="heading-section">On Tap</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-borderless table-dark">
+            <tbody>
+              {% for tapd in taps %}
+              <tr>
+                <td scope="row">
+                  <div>
+                    <span class="h4">{{ tapd.tap.onTap.product.name }} </span><span class="h6">by {{ tapd.tap.onTap.product.producer }}</span>
+                  </div><hr />
+                  {{ tapd.tap.onTap.product.style }}, {{ tapd.tap.onTap.product.abv }} ABV - {{ tapd.remaining }} L remaining
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <span class="heading-section h2">Top Players</span> - <a href="dashboard">My Dashboard</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-borderless table-dark">
+            <tbody>
+              {% for player in players %}
+              <tr>
+                <td scope="row">
+                  <div>
+                    <span class="h4">{{ player.name }} </span><span class="h6"> {{ player.username }}</span>
+                  </div><hr />
+                  Drank {% if player.volume_m is not None %}{{ player.volume_m }} mL
+                  {% else %}{{ player.volume }} L{% endif %}
+                  , in {{ player.reffils }} reffil{% if player.reffils > 1 %}s{% endif %}.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/static/dashboard/js/jquery.min.js"></script>
+  <script src="/static/dashboard/js/popper.js"></script>
+  <script src="/static/dashboard/js/bootstrap.min.js"></script>
+  <script src="/static/dashboard/js/main.js"></script>
+
+</body>
+
+</html>

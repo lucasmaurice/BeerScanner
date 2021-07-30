@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/scan/', api.tag_scan),
     path('api/', include(router.urls)),
     path('register/', views.register),
+    path('', views.dashboard),
 ]
