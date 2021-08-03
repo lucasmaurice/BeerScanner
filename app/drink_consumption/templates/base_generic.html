@@ -28,7 +28,7 @@
           <a href="{% url 'login'%}?next={{request.path}}">Login</a>
           {% endif %}
           - <a href="/">Home</a>
-          {% if request.user.is_staff %} - <a href="/admin">Administration</a>{% endif %}
+          {% if request.user.is_staff %} - <a href="/admin">Administration</a> - <a href="/api/history">Download history</a>{% endif %}
         </p></div>
       </div>
     </div>

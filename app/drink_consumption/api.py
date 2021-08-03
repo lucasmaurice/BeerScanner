@@ -4,6 +4,10 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.contrib.admin.views.decorators import staff_member_required
+
+import csv
+from django.http import HttpResponse
 
 from .models import *
 from .serializers import *
@@ -65,3 +69,20 @@ def tag_scan(request):
     result['cost'] = round(product.cost/product.capacity*container.capacity, 2)
 
     return Response(result)
+
+@staff_member_required
+def get_reffil_list(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="history.csv"'},
+    )
+
+    writer = csv.writer(response)
+    writer.writerow(["id","created_at","user","product","container","cost"])
+
+    refills = Refill.objects.all()
+    for refill in refills:
+        writer.writerow([refill.id, refill.created_at, refill.user.username, refill.product.product, refill.container, refill.cost()])
+
+    return response

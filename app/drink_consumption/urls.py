@@ -10,6 +10,7 @@ router.register(r'products', api.ProductViewSet)
 
 urlpatterns = [
     path('api/scan/', api.tag_scan),
+    path('api/history/', api.get_reffil_list),
     path('api/', include(router.urls)),
     path('register/', views.register),
     path('u/dashboard', views.personnal_dashboard),

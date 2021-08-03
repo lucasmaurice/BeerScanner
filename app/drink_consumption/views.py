@@ -58,7 +58,7 @@ def dashboard(request):
     taps_d = []
     for tap in taps:
         if tap.onTap is not None:
-            taps_d.append({'tap': tap, 'remaining': tap.onTap.remaining()})
+            taps_d.append({'tap': tap, 'remaining': round(tap.onTap.remaining(), 2)})
 
     players = User.objects.filter(groups__name='players', is_active=True)
 
@@ -77,14 +77,14 @@ def dashboard(request):
         else:
             name = player.first_name
 
-        volume_m = None
         if volume < 1:
-            volume_m = volume*1000
+            volume_s = str(round(volume * 1000, 2)) + "mL"
+        else:
+            volume_s = str(round(volume, 2)) + "L"
 
+        players_d.append({'name': name, 'username': player.username, 'reffils': drinks, 'volume': volume_s, 'liters': volume})
 
-        players_d.append({'name': name, 'username': player.username, 'reffils': drinks, 'volume': volume, 'volume_m': volume_m})
-
-    players_d.sort(key=lambda x: x.get('volume'), reverse=True)
+    players_d.sort(key=lambda x: x.get('liters'), reverse=True)
 
     return render(request, 'dashboard.html', {'taps': taps_d, 'players': players_d})
 
@@ -111,8 +111,8 @@ def personnal_dashboard(request):
         name = request.user.first_name
 
     if volume < 1:
-        volume = str(volume * 1000) + "mL"
+        volume = str(round(volume * 1000, 2)) + "mL"
     else:
-        volume = str(volume) + "L"
+        volume = str(round(volume, 2)) + "L"
 
-    return render(request, 'dashboard_p.html', {'refills': refills_d, 'name': name, 'volume': volume, 'drinks': drinks, 'cost': cost})
+    return render(request, 'dashboard_p.html', {'refills': refills_d, 'name': name, 'volume': volume, 'drinks': drinks, 'cost': round(cost, 2)})

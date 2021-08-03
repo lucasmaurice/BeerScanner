@@ -49,8 +49,7 @@
                     <span class="h4">{{ player.name }} </span><span class="h6"> {{ player.username }}</span>
                     {% if user.is_authenticated and user.get_username == player.username %} <em>(It's you!)</em>{% endif %}
                   </div><hr />
-                  Drank {% if player.volume_m is not None %}{{ player.volume_m }} mL
-                  {% else %}{{ player.volume }} L{% endif %}
+                  Drank {{ player.volume }}
                   , in {{ player.reffils }} reffil{% if player.reffils > 1 %}s{% endif %}.
                 </td>
               </tr>
