@@ -86,3 +86,63 @@ def get_reffil_list(request):
         writer.writerow([refill.id, refill.created_at, refill.user.username, refill.product.product, refill.container, refill.cost()])
 
     return response
+
+@api_view(['GET'])
+def players(request):
+    players = User.objects.filter(groups__name='players', is_active=True)
+
+    players_d = []
+
+    for player in players:
+        refills = Refill.objects.filter(user=player)
+        volume = 0
+        drinks = 0
+        for refill in refills:
+            drinks += 1
+            volume += refill.container.capacity
+
+        if player.first_name == "":
+            name = player.username
+        else:
+            name = player.first_name
+
+        if volume < 1:
+            volume_s = str(round(volume * 1000, 2)) + "mL"
+        else:
+            volume_s = str(round(volume, 2)) + "L"
+
+        players_d.append({'name': name, 'username': player.username, 'reffils': drinks, 'volume': volume_s, 'liters': volume})
+
+    players_d.sort(key=lambda x: x.get('liters'), reverse=True)
+    result = {'results': players_d}
+    return Response(result)
+
+@api_view(['GET'])
+def last_scan(request):
+    players = User.objects.filter(groups__name='players', is_active=True)
+
+    players_d = []
+
+    for player in players:
+        refills = Refill.objects.filter(user=player)
+        volume = 0
+        drinks = 0
+        for refill in refills:
+            drinks += 1
+            volume += refill.container.capacity
+
+        if player.first_name == "":
+            name = player.username
+        else:
+            name = player.first_name
+
+        if volume < 1:
+            volume_s = str(round(volume * 1000, 2)) + "mL"
+        else:
+            volume_s = str(round(volume, 2)) + "L"
+
+        players_d.append({'name': name, 'username': player.username, 'reffils': drinks, 'volume': volume_s, 'liters': volume})
+
+    players_d.sort(key=lambda x: x.get('liters'), reverse=True)
+    result = {'results': players_d}
+    return Response(result)
