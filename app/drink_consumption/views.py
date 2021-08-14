@@ -53,7 +53,7 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
-def dashboard(request):
+def home(request):
     taps = Tap.objects.all()
     taps_d = []
     for tap in taps:
@@ -116,3 +116,6 @@ def personnal_dashboard(request):
         volume = str(round(volume, 2)) + "L"
 
     return render(request, 'dashboard_p.html', {'refills': refills_d, 'name': name, 'volume': volume, 'drinks': drinks, 'cost': round(cost, 2)})
+
+def dashboard(request):
+    return render(request, 'chat/room.html')
