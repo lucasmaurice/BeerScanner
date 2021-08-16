@@ -15,7 +15,7 @@ $clr-notification: #ffc2c2;
 $clr-notification-dark: #e00000;
 
 /*   border radius */
-$radius: 0.2rem;
+$radius: 0.4rem;
 
 *,
 *::before,
@@ -25,90 +25,59 @@ $radius: 0.2rem;
   padding: 0;
 }
 
-body {
-  font-family: Mukta, sans-serif;
-  height: 100vh;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  color: $clr-gray500;
-}
-
-button {
-  font-family: inherit;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background-color: $clr-primary;
-  border-radius: $radius;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  color: $clr-gray200;
-  padding: 0.5rem;
-
-  svg {
-    width: 1rem;
-    fill: $clr-gray200;
-  }
-}
-
-.btn-secondary {
-  background-color: transparent;
-  font-weight: bold;
-  color: $clr-primary;
-}
-
 .notification {
-  position: absolute;
-  left: 50%;
-  transform: translatex(-50%);
-  background-color: $clr-notification-hover;
-  border-radius: $radius;
-  overflow: hidden;
+  position: fixed;
+  top:      0;
+  bottom:   0;
+  left:     0;
+  right:    0;
+  z-index:  9;
+  background-color: #181818ea;
+
   display: none;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
 
-  &__warning {
-    width: 1.5rem;
-    margin-left: 1rem;
-    fill: $clr-notification-dark;
+  &-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translatex(-50%) translatey(-50%);
+    z-index: 10;
+
+    border-radius: $radius;
+    
+    overflow: hidden;
+    background-color: #00885b;
+
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
-  &__close {
-    background-color: $clr-notification;
-    padding: 1rem;
+  &-show{
+    animation: middle 200ms ease-in-out forwards;
     display: flex;
-    cursor: pointer;
-
-    svg {
-      width: 1rem;
-      fill: $clr-notification-dark;
-    }
   }
 
-  &-show {
-    animation: warning 400ms ease-in-out forwards;
-    display: flex;
+  span {
+    color: #161d34;
+    justify-content: center;
+    align-items: center;
   }
 }
 
-@keyframes warning {
+@keyframes middle {
   0% {
-    opacity: 0;
-    top: 2rem;
-  }
-  5% {
     opacity: 0;
   }
   100% {
     opacity: 1;
-    top: 4rem;
   }
+}
+
+.table-item {
+  background-color: #343a40;
+  color: #FFF;
+  padding: .6rem;
+  padding-left: 1.5rem;
+  margin-bottom: .4rem !important;
+  border-radius: $radius;
 }
