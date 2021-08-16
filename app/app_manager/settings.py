@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'corsheaders',
+    'sass_processor',
     'drink_consumption.apps.DrinkconsumptionConfig',
 ]
 
@@ -142,6 +143,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+]
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR,'static/') 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
