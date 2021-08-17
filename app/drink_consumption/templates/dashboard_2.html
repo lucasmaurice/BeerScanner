@@ -3,6 +3,7 @@
 {% block script %}
 <script>
   let timeout;
+  let timeout_error;
 
   function connect() {
     var ws = new WebSocket(
@@ -32,31 +33,76 @@
       const data = JSON.parse(e.data);
       console.log(data);
 
-      switch(data.type){
-        case "register_reffil":
-          const notification = document.getElementById("notification");
-          const notification_title = document.getElementById("notification-title");
-          const notification_description = document.getElementById("notification-description");
+      if(data.type == "register_reffil" && data.result == "success"){
+        const notification = document.getElementById("notification");
+        const notification_description = document.getElementById("notification-description");
 
-                // Setup notification
-          notification_description.textContent = "Un " + data.container + " de " + data.product.name + " pour "  + data.user.first_name + ", Santé!";
-          notification.classList.add("notification-show");
+        notification_description.textContent = "Un " + data.container + " de " + data.product.name + " pour "  + data.user.first_name + ", Santé!";
+        notification.classList.add("notification-show");
 
-          clearTimeout(timeout);
-          timeout = setTimeout(function () {
-            notification.classList.remove("notification-show");
-          }, 8000);
-          break;
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+          notification.classList.remove("notification-show");
+        }, 8000);
+      
+      }else if(data.type == "register_reader_or_tag" && data.result == "success"){
+        const notification = document.getElementById("notification-register");
+        const notification_description = document.getElementById("notification-register-description");
 
-        default:
-          console.error("Unknown message received from ws.")
+        document.getElementById("notification-error").classList.remove("notification-error-show");
+        document.getElementById("notification-register").classList.remove("notification-register-show");
+
+        notification_description.innerHTML = "";
+
+        if(data.reader != null){
+          const item = document.createElement("li");
+          item.textContent = "Le lecteur \"" + data.reader.physical_id + "\" a été ajouté. Il faut le configurer."
+          notification_description.appendChild(item);
+        }
+        if(data.tag != null){
+          const item = document.createElement("li");
+          item.textContent = "Le tag \"" + data.tag.uid + "\" a été ajouté. Il faut le configurer."
+          notification_description.appendChild(item);
+        }
+
+        notification.classList.add("notification-register-show");
+
+        clearTimeout(timeout_error);
+        timeout_error = setTimeout(function () {
+          document.getElementById("notification-error").classList.remove("notification-error-show");
+          document.getElementById("notification-register").classList.remove("notification-register-show");
+        }, 8000);
+      
+      }else if(data.result != "success"){
+        const notification = document.getElementById("notification-error");
+        const notification_description = document.getElementById("notification-error-description");
+
+        document.getElementById("notification-error").classList.remove("notification-error-show");
+          document.getElementById("notification-register").classList.remove("notification-register-show");
+
+        notification_description.innerHTML = "";
+        data.errors.forEach(error => {
+          const item = document.createElement("li");
+          item.textContent = error.name + ': ' + error.error_message;
+          notification_description.appendChild(item);
+        });
+
+        notification.classList.add("notification-error-show");
+
+        clearTimeout(timeout_error);
+        timeout_error = setTimeout(function () {
+          document.getElementById("notification-error").classList.remove("notification-error-show");
+          document.getElementById("notification-register").classList.remove("notification-register-show");
+        }, 8000);
+      
+      } else{
+        console.error("Unknown message received from ws.")
       }
-
 
     };
   }
-
   connect();
+
 </script>
 {% endblock %}
 
@@ -70,6 +116,16 @@
         <h3 id="notification-description" ></h3>
       </p>
     </div>
+  </div>
+
+  <div id="notification-register" class="notification-register">
+    <p><h1 id="notification-register-title" >Tag ou Lecteur enregistré!</h1></p>
+    <ul id="notification-register-description"></ul>
+  </div>
+
+  <div id="notification-error" class="notification-error">
+    <p><h1 id="notification-error-title" >Error</h1></p>
+    <duliv id="notification-error-description"></ul>
   </div>
 
   <section class="ftco-top">
