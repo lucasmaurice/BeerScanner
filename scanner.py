@@ -88,7 +88,7 @@ def on_read(reader, uid):
         "reader_id": reader,
         "tag_id": uid
     }
-    response = requests.post("http://localhost:8000/api/scan/", data=parameters, timeout=3)
+    response = requests.post("http://beer.justereseau.ca/api/scan/", data=parameters, timeout=3)
     # Notify.Notification.new("Hi").show()
     if response.status_code == 200 or response.status_code == 201:
         jprint(response.json())

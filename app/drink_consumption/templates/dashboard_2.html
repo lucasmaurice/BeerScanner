@@ -7,7 +7,7 @@
 
   function connect() {
     var ws = new WebSocket(
-      "ws://" + window.location.host + "/ws/dashboard/"
+      "wss://" + window.location.host + "/ws/dashboard/"
     );
 
     ws.onopen = function (e) {
@@ -116,7 +116,7 @@
   function reload_data() {
 
     // Refresh players
-    fetch("http://" + window.location.host + "/api/players/").then(response => {
+    fetch(window.location.origin + "/api/players/").then(response => {
       if(response.ok) {
         response.json().then(data => {
           const players = document.getElementById("players");
@@ -140,13 +140,12 @@
       } else {
         console.log('Mauvaise réponse du réseau');
       }
-    })
-    .catch(function(error) {
+    }).catch(function(error) {
       console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
     });
 
     // Refresh taps
-    fetch("http://" + window.location.host + "/api/taps/").then(response => {
+    fetch(window.location.origin + "/api/taps/").then(response => {
       if(response.ok) {
         response.json().then(data => {
           const taps = document.getElementById("taps");
@@ -222,7 +221,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center mb-5">
-          <span class="heading-section h2">Meilleurs Joueurs</span>
+          <span class="heading-section h2">Meilleurs Buveurs</span>
         </div>
       </div>
       <div class="row">
