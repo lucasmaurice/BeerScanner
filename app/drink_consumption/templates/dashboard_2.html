@@ -37,13 +37,22 @@
         const notification = document.getElementById("notification");
         const notification_description = document.getElementById("notification-description");
 
-        notification_description.textContent = "Un " + data.container + " de " + data.product.name + " pour "  + data.user.first_name + ", Santé!";
+        notification_description.innerHTML = "";
+        
+        const item1 = document.createElement("p");
+        item1.textContent = "Un " + data.container + " de " + data.product.name + " pour "  + data.user.first_name + ", Santé!";
+        const item2 = document.createElement("p");
+        item2.textContent = "Total: " + data.user.drinks + " verres, environ " + data.user.cost + "$";
+
+        notification_description.appendChild(item1);
+        notification_description.appendChild(item2);
+
         notification.classList.add("notification-show");
 
         clearTimeout(timeout);
         timeout = setTimeout(function () {
           notification.classList.remove("notification-show");
-        }, 8000);
+        }, 5000);
       
       }else if(data.type == "register_reader_or_tag" && data.result == "success"){
         const notification = document.getElementById("notification-register");
@@ -78,7 +87,7 @@
         const notification_description = document.getElementById("notification-error-description");
 
         document.getElementById("notification-error").classList.remove("notification-error-show");
-          document.getElementById("notification-register").classList.remove("notification-register-show");
+        document.getElementById("notification-register").classList.remove("notification-register-show");
 
         notification_description.innerHTML = "";
         data.errors.forEach(error => {

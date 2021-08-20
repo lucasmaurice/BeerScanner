@@ -94,12 +94,24 @@ def tag_scan(request):
 
     Refill.objects.create(user=user, tag=tag, product=product, container=container).save()
 
+    refills = Refill.objects.filter(user=user)
+    volume = 0
+    drinks = 0
+    cost = 0
+    for refill in refills:
+        drinks += 1
+        volume += refill.container.capacity
+        cost += refill.cost()
+
     result = {}
     result['result'] = 'success'
     result['container'] = container.name
     result['user'] = UserSerializer(user).data
     result['product'] = ProductSerializer(product.product).data
     result['cost'] = round(product.cost/product.capacity*container.capacity, 2)
+
+    result['user']['drinks'] = drinks
+    result['user']['cost'] = round(cost, 2)
 
     result['type'] = 'register_reffil'
     async_to_sync(channel_layer.group_send)('refill_notification', result)
