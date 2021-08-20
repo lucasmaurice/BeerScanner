@@ -112,6 +112,71 @@
   }
   connect();
 
+  let interval;
+  function reload_data() {
+
+    // Refresh players
+    fetch("http://" + window.location.host + "/api/players/").then(response => {
+      if(response.ok) {
+        response.json().then(data => {
+          const players = document.getElementById("players");
+          var inner_html = ""
+
+          for(const player of data.results){
+            inner_html += `
+            <div class="col-md-12 col-lg-6 col-xl-4" >
+                <div class="table-item">
+                  <div>
+                    <span class="h4">` + player.name + ` </span>
+                  </div><hr />
+                  Drank ` + player.volume + `{{ player.volume }}
+                  , in ` + player.reffils + `{{ player.reffils }} reffil` + (player.reffils > 1 ? 's' : '') + `
+                </div>
+              </div>`;
+          }
+
+          players.innerHTML = inner_html;
+        });
+      } else {
+        console.log('Mauvaise réponse du réseau');
+      }
+    })
+    .catch(function(error) {
+      console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+    });
+
+    // Refresh taps
+    fetch("http://" + window.location.host + "/api/taps/").then(response => {
+      if(response.ok) {
+        response.json().then(data => {
+          const taps = document.getElementById("taps");
+          var inner_html = ""
+
+          for(const tap of data.results){
+            inner_html += `
+            <div class="col-md-12 col-lg-6 col-xl-4" >
+              <div class="table-item">
+                  <span class="h4">` + tap.onTap.name + `</span><br/><span class="h5">` + tap.remaining + `L remaining</span>
+              </div>
+            </div>`;
+          }
+
+          taps.innerHTML = inner_html;
+        });
+      } else {
+        console.log('Mauvaise réponse du réseau');
+      }
+    }).catch(function(error) {
+      console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+    });
+
+
+    clearTimeout(interval);
+    interval = setTimeout(reload_data, 5000);
+  }
+  reload_data();
+
+
 </script>
 {% endblock %}
 
@@ -147,18 +212,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="container">
-            <div class="row">
-              {% for tapd in taps %}
-              <div class="col-md-6" >
-                <div class="table-item">
-                  <div>
-                    <span class="h4">{{ tapd.tap.onTap.product.name }} </span><span class="h6">by {{ tapd.tap.onTap.product.producer }}</span>
-                  </div><hr />
-                  {{ tapd.tap.onTap.product.style }}, {{ tapd.tap.onTap.product.abv }} ABV - {{ tapd.remaining }} L remaining
-                </div>
-              </div>
-              {% endfor %}
-            </div>
+            <div id="taps" class="row"></div>
         </div>
       </div>
     </div>
@@ -174,19 +228,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="container">
-            <div class="row">
-              {% for player in players %}
-              <div class="col-md-12 col-lg-6 col-xl-4" >
-                <div class="table-item">
-                  <div>
-                    <span class="h4">{{ player.name }} </span><span class="h6"> {{ player.username }}</span>
-                  </div><hr />
-                  Drank {{ player.volume }}
-                  , in {{ player.reffils }} reffil{% if player.reffils > 1 %}s{% endif %}.
-                </div>
-              </div>
-              {% endfor %}
-            </div>
+            <div class="row" id="players"></div>
           </div>
         </div>
       </div>

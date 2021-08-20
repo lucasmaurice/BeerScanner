@@ -4,8 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 
 from . import forms
-from .models import Refill, Tag
-from .models import Tap
+from .models import Refill, Tag, Tap
 
 def register(request):
     # if this is a POST request we need to process the form data

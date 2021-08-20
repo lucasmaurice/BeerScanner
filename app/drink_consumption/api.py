@@ -24,11 +24,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
 
-class ContainerViewSet(viewsets.ModelViewSet):
-    queryset = Container.objects.all()
-    serializer_class = ContainerSerializer
-
-
 @api_view(['POST'])
 def tag_scan(request):
     create_reader = False
@@ -163,6 +158,17 @@ def players(request):
 
     players_d.sort(key=lambda x: x.get('liters'), reverse=True)
     result = {'results': players_d}
+    return Response(result)
+
+@api_view(['GET'])
+def taps(request):
+    taps = Tap.objects.all()
+    taps_d = []
+    for tap in taps:
+        if tap.onTap is not None:
+            taps_d.append({'onTap': ProductSerializer(tap.onTap.product, context={'request': request}).data, 'remaining': round(tap.onTap.remaining(), 2)})
+
+    result = {'results': taps_d}
     return Response(result)
 
 @api_view(['GET'])
