@@ -129,8 +129,8 @@
                   <div>
                     <span class="h4">` + player.name + ` </span>
                   </div><hr />
-                  Drank ` + player.volume + `{{ player.volume }}
-                  , in ` + player.reffils + `{{ player.reffils }} reffil` + (player.reffils > 1 ? 's' : '') + `
+                  A bu ` + player.volume + `{{ player.volume }},
+                  en ` + player.reffils + `{{ player.reffils }} verre` + (player.reffils > 1 ? 's' : '') + `
                 </div>
               </div>`;
           }
@@ -156,7 +156,7 @@
             inner_html += `
             <div class="col-md-12 col-lg-6 col-xl-4" >
               <div class="table-item">
-                  <span class="h4">` + tap.onTap.name + `</span><br/><span class="h5">` + tap.remaining + `L remaining</span>
+                  <span class="h4">` + tap.onTap.name + `</span><br/><span class="h5">` + tap.remaining + ` L restants</span>
               </div>
             </div>`;
           }
@@ -206,7 +206,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center mb-5">
-          <h2 class="heading-section">On Tap</h2>
+          <h2 class="heading-section">Sur nos Lignes</h2>
         </div>
       </div>
       <div class="row">
@@ -222,7 +222,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center mb-5">
-          <span class="heading-section h2">Top Players</span>
+          <span class="heading-section h2">Meilleurs Joueurs</span>
         </div>
       </div>
       <div class="row">
