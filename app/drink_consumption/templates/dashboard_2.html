@@ -1,0 +1,133 @@
+{% extends "base_generic.html" %}
+
+{% block script %}
+<script>
+  let timeout;
+
+  function connect() {
+    var ws = new WebSocket(
+      "ws://" + window.location.host + "/ws/dashboard/"
+    );
+
+    ws.onopen = function (e) {
+      console.log("WebSocket is open now.");
+    };
+
+    ws.onclose = function (e) {
+      console.log("Socket is closed. Reconnect will be attempted in 1 second.", e.reason);
+      setTimeout(function () { connect(); }, 1000);
+    };
+
+    ws.onerror = function (err) {
+      console.error(
+        "Socket encountered error: ",
+        err.message,
+        "Closing socket"
+      );
+      ws.close();
+    };
+
+    ws.onmessage = function (e) {
+
+      const data = JSON.parse(e.data);
+      console.log(data);
+
+      switch(data.type){
+        case "register_reffil":
+          const notification = document.getElementById("notification");
+          const notification_title = document.getElementById("notification-title");
+          const notification_description = document.getElementById("notification-description");
+
+                // Setup notification
+          notification_description.textContent = "Un " + data.container + " de " + data.product.name + " pour "  + data.user.first_name + ", Santé!";
+          notification.classList.add("notification-show");
+
+          clearTimeout(timeout);
+          timeout = setTimeout(function () {
+            notification.classList.remove("notification-show");
+          }, 8000);
+          break;
+
+        default:
+          console.error("Unknown message received from ws.")
+      }
+
+
+    };
+  }
+
+  connect();
+</script>
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <div id="notification" class="notification">
+    <div class="notification-content">
+      <p>
+        <h1 id="notification-title" >Boesson enregistrée!</h1><br/>
+        <h3 id="notification-description" ></h3>
+      </p>
+    </div>
+  </div>
+
+  <section class="ftco-top">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <h2 class="heading-section">On Tap</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="container">
+            <div class="row">
+              {% for tapd in taps %}
+              <div class="col-md-6" >
+                <div class="table-item">
+                  <div>
+                    <span class="h4">{{ tapd.tap.onTap.product.name }} </span><span class="h6">by {{ tapd.tap.onTap.product.producer }}</span>
+                  </div><hr />
+                  {{ tapd.tap.onTap.product.style }}, {{ tapd.tap.onTap.product.abv }} ABV - {{ tapd.remaining }} L remaining
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <span class="heading-section h2">Top Players</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="container">
+            <div class="row">
+              {% for player in players %}
+              <div class="col-md-12 col-lg-6 col-xl-4" >
+                <div class="table-item">
+                  <div>
+                    <span class="h4">{{ player.name }} </span><span class="h6"> {{ player.username }}</span>
+                  </div><hr />
+                  Drank {{ player.volume }}
+                  , in {{ player.reffils }} reffil{% if player.reffils > 1 %}s{% endif %}.
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+
+{% block footer %}{% endblock %}

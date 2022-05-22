@@ -53,7 +53,7 @@ def register(request):
 
     return render(request, 'register.html', {'form': form})
 
-def dashboard(request):
+def home(request):
     taps = Tap.objects.all()
     taps_d = []
     for tap in taps:
@@ -116,3 +116,37 @@ def personnal_dashboard(request):
         volume = str(round(volume, 2)) + "L"
 
     return render(request, 'dashboard_p.html', {'refills': refills_d, 'name': name, 'volume': volume, 'drinks': drinks, 'cost': round(cost, 2)})
+
+def dashboard(request):
+    taps = Tap.objects.all()
+    taps_d = []
+    for tap in taps:
+        if tap.onTap is not None:
+            taps_d.append({'tap': tap, 'remaining': round(tap.onTap.remaining(), 2)})
+
+    players = User.objects.filter(groups__name='players', is_active=True)
+
+    players_d = []
+
+    for player in players:
+        refills = Refill.objects.filter(user=player)
+        volume = 0
+        drinks = 0
+        for refill in refills:
+            drinks += 1
+            volume += refill.container.capacity
+
+        if player.first_name == "":
+            name = player.username
+        else:
+            name = player.first_name
+
+        if volume < 1:
+            volume_s = str(round(volume * 1000, 2)) + "mL"
+        else:
+            volume_s = str(round(volume, 2)) + "L"
+
+        players_d.append({'name': name, 'username': player.username, 'reffils': drinks, 'volume': volume_s, 'liters': volume})
+
+    players_d.sort(key=lambda x: x.get('liters'), reverse=True)
+    return render(request, 'dashboard_2.html', {'taps': taps_d, 'players': players_d})
